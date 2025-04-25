@@ -7,6 +7,8 @@ function Weather() {
   const [currentLocation, setCurrentLocation] = useState('');
   const [weather, setWeather] = useState({});
   const [query, setQuery] = useState('');
+  const [showMore, setShowMore] = useState(false);
+
 
   const getCurrentLocation = async () => {
     try {
@@ -32,7 +34,7 @@ function Weather() {
         })
       setWeather(res.data);
       setQuery('')
-      console.log(res.data)
+      console.log(res.data);
     }
     catch (error) {
       console.log(error)
@@ -42,11 +44,10 @@ function Weather() {
   useEffect(() => {
     getCurrentLocation();
   }, [])
-  
+
   useEffect(() => {
     if (currentLocation) {
       searchQuery();
-      console.log(weather)
     }
   }, [currentLocation])
 
@@ -83,7 +84,19 @@ function Weather() {
             />
             <p>{weather?.weather?.[0]?.description}</p>
           </div>
-          <span className="view_more">View More</span>
+          <span
+            className="view_more"
+            onClick={() => setShowMore(!showMore)}
+            style={{ cursor: "pointer", color: "blue" }}
+          >
+            {showMore ? "Hide Details" : "View More"}
+          </span>
+          {showMore && (
+            <>
+              <p >Humidity: {weather?.main?.humidity}</p>
+              <p >Pressure: {weather?.main?.pressure}</p>
+            </>
+          )}
         </div>
       )}
     </div>
